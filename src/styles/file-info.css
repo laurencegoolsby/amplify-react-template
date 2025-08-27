@@ -18,6 +18,17 @@
   border: 1px solid #e1e5e9;
   border-radius: 8px;
   margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.file-item:hover {
+  background-color: rgba(15, 76, 117, 0.05);
+  border-color: #0f4c75;
+}
+
+.file-details {
+  flex: 1;
 }
 
 .file-details p {
@@ -28,6 +39,19 @@
 
 .file-details strong {
   color: #0f4c75;
+}
+
+.file-item.selected {
+  border-color: #0f4c75;
+  background-color: #f0f7ff;
+}
+
+.file-display-title {
+  color: #0f4c75;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
 }
 
 .delete-btn {

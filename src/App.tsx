@@ -8,6 +8,7 @@ import './styles/typography.css';
 import './styles/radio-group.css';
 import './styles/file-info.css';
 import './styles/upload-controls.css';
+import './styles/modal.css';
 
 function App() {
   const handleSignOut = () => {
@@ -16,8 +17,18 @@ function App() {
 
   const [documentType, setDocumentType] = useState('Personal Information');
   const [uploadedFiles, setUploadedFiles] = useState<{id: string, name: string, size: number, type: string}[]>([]);
+  const [selectedFile, setSelectedFile] = useState<{id: string, name: string, size: number, type: string} | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   const addFile = (file: File) => {
+    // Check if file with same name already exists
+    const isDuplicate = uploadedFiles.some(existingFile => existingFile.name === file.name);
+    
+    if (isDuplicate) {
+      setShowModal(true);
+      return;
+    }
+    
     const newFile = {
       id: Date.now().toString(),
       name: file.name,
@@ -29,6 +40,11 @@ function App() {
 
   const deleteFile = (id: string) => {
     setUploadedFiles(prev => prev.filter(file => file.id !== id));
+  };
+
+  const formatFileSize = (bytes: number) => {
+    const mb = bytes / 1024 / 1024;
+    return mb < 1 ? `${(bytes / 1024).toFixed(0)} KB` : `${mb.toFixed(2)} MB`;
   };
 
   return (
@@ -66,15 +82,15 @@ function App() {
             <div className="files-list">
               <h3 className="selector-title">Uploaded Files:</h3>
               {uploadedFiles.map((file) => (
-                <div key={file.id} className="file-item">
+                <div key={file.id} className={`file-item ${selectedFile?.id === file.id ? 'selected' : ''}`} onClick={() => setSelectedFile(file)}>
                   <div className="file-details">
                     <p><strong>Name:</strong> {file.name}</p>
                     <p><strong>Type:</strong> {file.type}</p>
-                    <p><strong>Size:</strong> {(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    <p><strong>Size:</strong> {formatFileSize(file.size)}</p>
                   </div>
                   <button 
                     className="delete-btn" 
-                    onClick={() => deleteFile(file.id)}
+                    onClick={(e) => { e.stopPropagation(); deleteFile(file.id); }}
                   >
                     Delete
                   </button>
@@ -86,15 +102,35 @@ function App() {
         
         <div className="results-section">
           <h2 className="section-title">Processing Results</h2>
-          {uploadedFiles.length === 0 && (
+          {uploadedFiles.length === 0 ? (
             <p className="section-description">
               Upload a document to see processing results here
+            </p>
+          ) : selectedFile ? (
+            <div className="file-display">
+              <h3 className="file-display-title">{selectedFile.name} | {selectedFile.type} | {formatFileSize(selectedFile.size)}</h3>
+            </div>
+          ) : (
+            <p className="section-description">
+              Click on a file to view details
             </p>
           )}
         </div>
       </main>
 
       <Footer />
+      
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Duplicate File</h3>
+            <p>A file with this name has already been uploaded.</p>
+            <button className="modal-btn" onClick={() => setShowModal(false)}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
