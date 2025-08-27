@@ -1,6 +1,10 @@
 import '../styles/header.css';
 
-export default function Header() {
+interface HeaderProps {
+  onSignOut: () => void;
+}
+
+export default function Header({ onSignOut }: HeaderProps) {
   return (
     <header className="header">
       <div className="header-banner">
@@ -16,6 +20,9 @@ export default function Header() {
             <p className="header-subtitle">Document Processing Portal</p>
           </div>
         </div>
+        <button onClick={onSignOut} className="sign-out-btn">
+          Sign Out
+        </button>
       </div>
     </header>
   );

@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import type { Schema } from "../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
 import FileUpload from './components/FileUpload';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
@@ -9,25 +6,12 @@ import './styles/globals.css';
 import './styles/layout.css';
 import './styles/typography.css';
 
-const client = generateClient<Schema>();
-
 function App() {
   const { signOut } = useAuthenticator();
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
-  useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
-  }
 
   return (
     <div className="app-container">
-      <Header />
+      <Header onSignOut={signOut} />
       
       <main className="main-content">
         <div className="upload-section">
