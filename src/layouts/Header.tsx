@@ -13,7 +13,7 @@ export default function Header({ onSignOut }: HeaderProps) {
       </div>
       <div className="header-main">
         <div className="header-brand">
-          <div className="header-logo">PA</div>
+          <div className="header-logo">IDP</div>
           <div>
             <h1 className="header-title">Intelligent Document Processing</h1>
             <p className="header-subtitle">For demonstration purposes only</p>

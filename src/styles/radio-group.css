@@ -1,0 +1,36 @@
+/* Radio Group Styles */
+.document-type-selector {
+  margin-bottom: 32px;
+}
+
+.selector-title {
+  color: #0f4c75;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #5a6c7d;
+}
+
+.radio-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0f4c75;
+}
+
+.radio-option:hover {
+  color: #0f4c75;
+}

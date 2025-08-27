@@ -3,13 +3,15 @@ import './FileUpload.css';
 
 interface FileUploadProps {
   onUploadComplete?: (result: { key: string; url: string }) => void;
+  onFileSelect?: (file: File) => void;
 }
 
-export default function FileUpload({ onUploadComplete }: FileUploadProps) {
+export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
   const uploadFile = async (file: File) => {
+    onFileSelect?.(file);
 
     setUploading(true);
     
