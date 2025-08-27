@@ -9,15 +9,14 @@ export default function Header({ onSignOut }: HeaderProps) {
     <header className="header">
       <div className="header-banner">
         <div className="header-banner-content">
-          An Unofficial Pennsylvania Government Website
         </div>
       </div>
       <div className="header-main">
         <div className="header-brand">
           <div className="header-logo">PA</div>
           <div>
-            <h1 className="header-title">Department of Human Services</h1>
-            <p className="header-subtitle">Document Processing Portal</p>
+            <h1 className="header-title">Intelligent Document Processing</h1>
+            <p className="header-subtitle">For demonstration purposes only</p>
           </div>
         </div>
         <button onClick={onSignOut} className="sign-out-btn">

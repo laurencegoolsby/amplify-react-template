@@ -23,7 +23,7 @@ function App() {
         </div>
         
         <div className="results-section">
-          <h3 className="section-subtitle">Processing Results</h3>
+          <h2 className="section-subtitle">Processing Results</h2>
           <p className="results-text">
             Upload a document to see processing results here
           </p>
