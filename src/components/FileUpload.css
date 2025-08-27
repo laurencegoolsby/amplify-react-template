@@ -1,0 +1,125 @@
+.upload-container {
+  max-width: 600px;
+  margin: 32px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.upload-zone {
+  position: relative;
+  border: 2px dashed #0f4c75;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(15, 76, 117, 0.1);
+}
+
+.upload-zone:hover {
+  border-color: #003d5c;
+  background: #f8fbff;
+  box-shadow: 0 4px 16px rgba(15, 76, 117, 0.15);
+}
+
+.drag-over .upload-zone {
+  border-color: #003d5c;
+  background: #e8f4fd;
+  border-style: solid;
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-icon {
+  color: #0f4c75;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.upload-zone:hover .upload-icon {
+  color: #003d5c;
+}
+
+.upload-text h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f4c75;
+  font-family: inherit;
+}
+
+.upload-text p {
+  margin: 0;
+  font-size: 16px;
+  color: #5a6c7d;
+  line-height: 1.5;
+}
+
+.upload-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #d1d9e0;
+  border-top: 3px solid #0f4c75;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.upload-progress span {
+  font-size: 16px;
+  font-weight: 500;
+  color: #0f4c75;
+  font-family: inherit;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.uploading .upload-zone {
+  pointer-events: none;
+}
+
+/* PA.gov inspired button styling */
+.upload-zone::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0f4c75 0%, #1e5f8b 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.upload-zone:hover::after {
+  opacity: 1;
+}

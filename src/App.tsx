@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import FileUpload from './components/FileUpload';
+import Header from './layouts/Header';
+import Footer from './layouts/Footer';
+import './styles/globals.css';
+import './styles/layout.css';
+import './styles/typography.css';
 
 const client = generateClient<Schema>();
 
@@ -20,23 +26,28 @@ function App() {
   }
 
   return (
-    <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ new</button>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-      <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
-       </div>
-      <button onClick={signOut}>Sign out</button>
-    </main>
+    <div className="app-container">
+      <Header />
+      
+      <main className="main-content">
+        <div className="upload-section">
+          <h2 className="section-title">Document Upload</h2>
+          <p className="section-description">
+            Upload your documents for automated processing and analysis
+          </p>
+          <FileUpload onUploadComplete={(result) => console.log('Upload complete:', result)} />
+        </div>
+        
+        <div className="results-section">
+          <h3 className="section-subtitle">Processing Results</h3>
+          <p className="results-text">
+            Upload a document to see processing results here
+          </p>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
