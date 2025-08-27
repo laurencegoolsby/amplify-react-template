@@ -15,9 +15,10 @@
 }
 
 .upload-zone:hover {
-  border-color: #003d5c;
-  background: #f8fbff;
-  box-shadow: 0 4px 16px rgba(15, 76, 117, 0.15);
+  border: 3px solid #0f4c75;
+  background: #e8f4fd;
+  box-shadow: 0 6px 24px rgba(15, 76, 117, 0.25);
+  transform: translateY(-2px);
 }
 
 .drag-over .upload-zone {
@@ -107,19 +108,3 @@
   pointer-events: none;
 }
 
-/* PA.gov inspired button styling */
-.upload-zone::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #0f4c75 0%, #1e5f8b 100%);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.upload-zone:hover::after {
-  opacity: 1;
-}

@@ -1,6 +1,6 @@
 /* Radio Group Styles */
 .document-type-selector {
-  margin-bottom: 32px;
+  margin-bottom: 0;
 }
 
 .selector-title {
@@ -21,7 +21,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
   color: #5a6c7d;
 }
 

@@ -34,10 +34,11 @@
   background-color: #dc3545;
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 12px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 500;
   transition: background-color 0.2s;
 }
 

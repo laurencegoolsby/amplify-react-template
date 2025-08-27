@@ -7,6 +7,7 @@ import './styles/layout.css';
 import './styles/typography.css';
 import './styles/radio-group.css';
 import './styles/file-info.css';
+import './styles/upload-controls.css';
 
 function App() {
   const handleSignOut = () => {
@@ -36,34 +37,34 @@ function App() {
       
       <main className="main-content">
         <div className="upload-section">
-          <h2 className="section-title">Document Upload</h2>
-          <p className="section-description">
-            Upload your documents for automated processing and analysis
-          </p>
-          
-          <div className="document-type-selector">
-            <h3 className="selector-title">Document Type</h3>
-            <div className="radio-group">
-              {['Personal Information', 'Income', 'Miscellaneous'].map((type) => (
-                <label key={type} className="radio-option">
-                  <input
-                    type="radio"
-                    name="documentType"
-                    value={type}
-                    checked={documentType === type}
-                    onChange={(e) => setDocumentType(e.target.value)}
-                  />
-                  <span>{type}</span>
-                </label>
-              ))}
+          <h2 className="section-title">Document Upload</h2>          
+          <div className="upload-controls">
+            <div className="document-type-selector">
+              <h3 className="selector-title">Document Type:</h3>
+              <div className="radio-group">
+                {['Personal Information', 'Income', 'Miscellaneous'].map((type) => (
+                  <label key={type} className="radio-option">
+                    <input
+                      type="radio"
+                      name="documentType"
+                      value={type}
+                      checked={documentType === type}
+                      onChange={(e) => setDocumentType(e.target.value)}
+                    />
+                    <span>{type}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            
+            <div className="upload-wrapper">
+              <FileUpload onUploadComplete={(result) => console.log('Upload complete:', result)} onFileSelect={addFile} />
             </div>
           </div>
           
-          <FileUpload onUploadComplete={(result) => console.log('Upload complete:', result)} onFileSelect={addFile} />
-          
           {uploadedFiles.length > 0 && (
             <div className="files-list">
-              <h4>Uploaded Files:</h4>
+              <h3 className="selector-title">Uploaded Files:</h3>
               {uploadedFiles.map((file) => (
                 <div key={file.id} className="file-item">
                   <div className="file-details">
