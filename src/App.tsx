@@ -1,4 +1,3 @@
-import { useAuthenticator } from '@aws-amplify/ui-react';
 import FileUpload from './components/FileUpload';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
@@ -7,11 +6,13 @@ import './styles/layout.css';
 import './styles/typography.css';
 
 function App() {
-  const { signOut } = useAuthenticator();
+  const handleSignOut = () => {
+    console.log('Sign out clicked');
+  };
 
   return (
     <div className="app-container">
-      <Header onSignOut={signOut} />
+      <Header onSignOut={handleSignOut} />
       
       <main className="main-content">
         <div className="upload-section">
@@ -23,8 +24,8 @@ function App() {
         </div>
         
         <div className="results-section">
-          <h2 className="section-subtitle">Processing Results</h2>
-          <p className="results-text">
+          <h2 className="section-title">Processing Results</h2>
+          <p className="section-description">
             Upload a document to see processing results here
           </p>
         </div>
