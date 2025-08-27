@@ -54,7 +54,10 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) uploadFile(file);
+    if (file) {
+      uploadFile(file);
+      event.target.value = ''; // Reset input to allow same file again
+    }
   };
 
   const handleDrop = (event: React.DragEvent) => {

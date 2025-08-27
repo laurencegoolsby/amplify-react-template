@@ -86,9 +86,11 @@ function App() {
         
         <div className="results-section">
           <h2 className="section-title">Processing Results</h2>
-          <p className="section-description">
-            Upload a document to see processing results here
-          </p>
+          {uploadedFiles.length === 0 && (
+            <p className="section-description">
+              Upload a document to see processing results here
+            </p>
+          )}
         </div>
       </main>
 
