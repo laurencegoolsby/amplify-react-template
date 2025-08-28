@@ -44,7 +44,8 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           disabled={uploading}
           className="file-input"
           id="file-upload"
-          accept=".pdf,application/pdf,.jpg,.jpeg,.png,.gif,.bmp,.webp,image/*"
+          accept="image/*,.pdf"
+          capture="environment"
         />
         <label htmlFor="file-upload" className="upload-label">
           <div className="upload-icon">
@@ -58,7 +59,8 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           </div>
           <div className="upload-text">
             <h3>Click to upload</h3>
-            <p>PDF and image files (max 10MB)<br />Tap to take photo or upload from library</p>
+            <p>PDF and image files (max 10MB)</p>
+            <p className="mobile-only">Choose camera, photo library, or browse files</p>
           </div>
         </label>
         {uploading && (
