@@ -54,6 +54,7 @@ function App() {
       const responseData = await uploadFile(file, documentType, fileUpload.setUploadProgress);
       
       setTimeout(() => {
+        fileUpload.setUploadProgress(100);
         fileUpload.setUploadInProgress(false);
         fileUpload.addFile(newFile);
         fileUpload.updateFileWithResponse(newFile.id, responseData);

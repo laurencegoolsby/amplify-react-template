@@ -16,11 +16,11 @@ export const uploadFile = async (
   // Simulate progress
   const progressInterval = setInterval(() => {
     onProgress((prev: number) => {
-      if (prev >= 90) {
+      if (prev >= 95) {
         clearInterval(progressInterval);
         return prev;
       }
-      return prev + Math.random() * 15;
+      return Math.min(prev + Math.random() * 10, 95);
     });
   }, 100);
   
@@ -43,7 +43,6 @@ export const uploadFile = async (
     clearTimeout(timeoutId);
     
     clearInterval(progressInterval);
-    onProgress(100);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
