@@ -45,6 +45,7 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           className="file-input"
           id="file-upload"
           accept=".pdf,application/pdf,.jpg,.jpeg,.png,.gif,.bmp,.webp,image/*"
+          capture="environment"
         />
         <label htmlFor="file-upload" className="upload-label">
           <div className="upload-icon">
@@ -58,7 +59,7 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           </div>
           <div className="upload-text">
             <h3>Click to upload</h3>
-            <p>PDF and image files (max 10MB)</p>
+            <p>PDF and image files (max 10MB)<br />Tap to take photo or upload from library</p>
           </div>
         </label>
         {uploading && (

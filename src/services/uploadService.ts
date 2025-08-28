@@ -3,7 +3,7 @@ export const uploadFile = async (
   documentType: string,
   onProgress: (progress: number | ((prev: number) => number)) => void
 ): Promise<any> => {
-  const endpoint = 'http://copa-a-appli-xy2jnn96xnau-1399784121.us-west-2.elb.amazonaws.com/upload-pdf';
+  const endpoint = 'http://copa-a-appli-xy2jnn96xnau-1399784121.us-west-2.elb.amazonaws.com/upload';
   
   const formData = new FormData();
   formData.append('file', file);
