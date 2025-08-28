@@ -29,7 +29,7 @@ function App() {
   };
   const addFile = async (file: File) => {
     if (!validateFileType(file)) {
-      alert.showAlertMessage('Please select a PDF file. Only PDF documents are supported.', 'error');
+      alert.showAlertMessage('Please select a PDF or image file. Only PDF documents and images are supported.', 'error');
       return;
     }
     
@@ -61,7 +61,10 @@ function App() {
       console.error('Failed to send document upload notification:', error);
       setTimeout(() => {
         fileUpload.setUploadInProgress(false);
-        alert.showAlertMessage('Network error. Please check your connection.', 'error');
+        const errorMessage = error instanceof Error && error.message.includes('HTTP error') 
+          ? 'Upload failed. Please try again.' 
+          : 'Network error. Please check your connection.';
+        alert.showAlertMessage(errorMessage, 'error');
       }, 500);
     }
   };

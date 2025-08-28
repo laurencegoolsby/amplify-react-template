@@ -9,5 +9,5 @@ export const validateFileSize = (file: File, maxSizeMB: number = 10): boolean =>
 };
 
 export const validateFileType = (file: File): boolean => {
-  return file.type === 'application/pdf';
+  return file.type === 'application/pdf' || file.type.startsWith('image/');
 };

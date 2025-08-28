@@ -44,6 +44,10 @@
     width: 100%;
   }
   
+  .upload-wrapper {
+    width: 100%;
+  }
+  
   .endpoint-toggle {
     margin-top: 0;
   }
