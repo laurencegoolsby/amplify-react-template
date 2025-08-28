@@ -25,6 +25,9 @@ export const uploadFile = async (
   }, 100);
   
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 second timeout
+    
     const response = await fetch(endpoint, {
       method: 'POST',
       mode: 'cors',
@@ -33,8 +36,11 @@ export const uploadFile = async (
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       },
-      body: formData
+      body: formData,
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     clearInterval(progressInterval);
     onProgress(100);
@@ -47,6 +53,11 @@ export const uploadFile = async (
   } catch (error) {
     clearInterval(progressInterval);
     onProgress(100);
+    
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timeout');
+    }
+    
     throw error;
   }
 };

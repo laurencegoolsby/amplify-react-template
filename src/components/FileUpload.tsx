@@ -4,9 +4,10 @@ import './FileUpload.css';
 interface FileUploadProps {
   onUploadComplete?: (result: { key: string; url: string }) => void;
   onFileSelect?: (file: File) => void;
+  disabled?: boolean;
 }
 
-export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploadProps) {
+export default function FileUpload({ onUploadComplete, onFileSelect, disabled }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
 
 
@@ -36,12 +37,12 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
 
 
   return (
-    <div className={`upload-container ${uploading ? 'uploading' : ''}`}>
+    <div className={`upload-container ${uploading ? 'uploading' : ''} ${disabled ? 'disabled' : ''}`}>
       <div className="upload-zone">
         <input
           type="file"
           onChange={handleFileUpload}
-          disabled={uploading}
+          disabled={uploading || disabled}
           className="file-input"
           id="file-upload"
           accept="image/*,.pdf"
@@ -63,7 +64,7 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
             <p className="mobile-only">Choose camera, photo library, or browse files</p>
           </div>
         </label>
-        {uploading && (
+        {(uploading || disabled) && (
           <div className="upload-progress">
             <div className="spinner"></div>
             <span>Processing...</span>

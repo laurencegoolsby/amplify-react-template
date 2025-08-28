@@ -18,6 +18,19 @@ export default function ResultsDisplay({
   processingResult, 
   showResults 
 }: ResultsDisplayProps) {
+  if (uploadInProgress && selectedFile) {
+    return (
+      <div className="file-display">
+        <div className="loading-container">
+          <div className="loading-text">Uploading... {Math.round(uploadProgress)}%</div>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{width: `${uploadProgress}%`}}></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (uploadedFiles.length === 0) {
     return (
       <p className="section-description">
@@ -36,14 +49,7 @@ export default function ResultsDisplay({
 
   return (
     <div className="file-display">
-      {uploadInProgress ? (
-        <div className="loading-container">
-          <div className="loading-text">Uploading... {Math.round(uploadProgress)}%</div>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{width: `${uploadProgress}%`}}></div>
-          </div>
-        </div>
-      ) : selectedFile?.apiResponse ? (
+      {selectedFile?.apiResponse ? (
         <div style={{width: '100%', padding: '20px'}}>
           <div style={{backgroundColor: '#f8fbff', border: '1px solid #e1e5e9', borderRadius: '8px', padding: '16px', overflow: 'auto'}}>
             <pre style={{margin: 0, fontSize: '12px', color: '#5a6c7d', whiteSpace: 'pre-wrap', wordWrap: 'break-word'}}>

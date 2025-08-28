@@ -20,6 +20,7 @@ import './styles/modal.css';
 
 function App() {
   const [documentType, setDocumentType] = useState('Paystub');
+  const [uploadingFile, setUploadingFile] = useState<any>(null);
   
   const alert = useAlert();
   const fileUpload = useFileUpload();
@@ -47,6 +48,7 @@ function App() {
     
     fileUpload.setUploadInProgress(true);
     fileUpload.setUploadProgress(0);
+    setUploadingFile(newFile);
     
     try {
       const responseData = await uploadFile(file, documentType, fileUpload.setUploadProgress);
@@ -55,25 +57,33 @@ function App() {
         fileUpload.setUploadInProgress(false);
         fileUpload.addFile(newFile);
         fileUpload.updateFileWithResponse(newFile.id, responseData);
+        setUploadingFile(null);
         alert.showAlertMessage('Document uploaded successfully!', 'success');
       }, 500);
     } catch (error) {
       console.error('Failed to send document upload notification:', error);
       setTimeout(() => {
         fileUpload.setUploadInProgress(false);
-        let errorMessage = 'Network error. Please check your connection.';
+        let errorMessage = 'Upload failed. Please try again later.';
         
-        if (error instanceof Error && error.message.includes('HTTP error')) {
-          const statusMatch = error.message.match(/status: (\d+)/);
-          const status = statusMatch ? parseInt(statusMatch[1]) : 0;
-          
-          if (status >= 400 && status < 500) {
-            errorMessage = 'This file cannot be processed. Please try a different file.';
-          } else {
-            errorMessage = 'Upload failed. Please try again.';
+        if (error instanceof Error) {
+          if (error.message === 'Request timeout') {
+            errorMessage = 'Upload service is currently unavailable. Please try again later.';
+          } else if (error.message.includes('HTTP error')) {
+            const statusMatch = error.message.match(/status: (\d+)/);
+            const status = statusMatch ? parseInt(statusMatch[1]) : 0;
+            
+            if (status >= 400 && status < 500) {
+              errorMessage = 'This file cannot be processed. Please try a different file.';
+            } else if (status >= 500) {
+              errorMessage = 'Upload service is currently unavailable. Please try again later.';
+            } else {
+              errorMessage = 'Upload failed. Please try again later.';
+            }
           }
         }
-        
+
+        setUploadingFile(null);
         alert.showAlertMessage(errorMessage, 'error');
       }, 500);
     }
@@ -104,7 +114,7 @@ function App() {
             />
             
             <div className="upload-wrapper">
-              <FileUpload onUploadComplete={(result) => console.log('Upload complete:', result)} onFileSelect={addFile} />
+              <FileUpload onUploadComplete={(result) => console.log('Upload complete:', result)} onFileSelect={addFile} disabled={fileUpload.uploadInProgress} />
             </div>
           </div>
           
@@ -120,7 +130,7 @@ function App() {
           <h2 className="section-title">Intelligent Document Processing Results</h2>
           <ResultsDisplay 
             uploadedFiles={fileUpload.uploadedFiles}
-            selectedFile={fileUpload.selectedFile}
+            selectedFile={uploadingFile || fileUpload.selectedFile}
             uploadInProgress={fileUpload.uploadInProgress}
             uploadProgress={fileUpload.uploadProgress}
             processingResult={null}

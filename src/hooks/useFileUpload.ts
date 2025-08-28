@@ -26,6 +26,11 @@ export const useFileUpload = () => {
     setSelectedFile(prev => prev?.id === fileId ? { ...prev, apiResponse } : prev);
   };
 
+  const removeFile = (fileId: string) => {
+    setUploadedFiles(prev => prev.filter(f => f.id !== fileId));
+    setSelectedFile(prev => prev?.id === fileId ? null : prev);
+  };
+
   return {
     uploadedFiles,
     selectedFile,
@@ -35,6 +40,7 @@ export const useFileUpload = () => {
     setUploadProgress,
     setUploadInProgress,
     addFile,
-    updateFileWithResponse
+    updateFileWithResponse,
+    removeFile
   };
 };

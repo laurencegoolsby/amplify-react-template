@@ -194,6 +194,29 @@
   pointer-events: none;
 }
 
+.disabled .upload-zone {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.disabled .upload-label {
+  cursor: not-allowed;
+}
+
+.disabled .upload-zone {
+  border-color: #ccc;
+  background-color: #f5f5f5;
+}
+
+.disabled .upload-text {
+  color: #999;
+}
+
+.disabled .upload-icon {
+  color: #ccc;
+}
+
 .mobile-only {
   display: none;
 }
