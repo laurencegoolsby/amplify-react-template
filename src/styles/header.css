@@ -57,16 +57,36 @@
 
 .sign-out-btn {
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 12px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   transition: all 0.2s ease;
+  min-height: 44px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.sign-out-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
+@media (hover: hover) {
+  .sign-out-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (min-width: 768px) {
+  .sign-out-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: normal;
+    min-height: auto;
+    min-width: auto;
+    border-width: 1px;
+    border-radius: 4px;
+  }
 }
