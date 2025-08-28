@@ -22,28 +22,25 @@ export const processDocument = async (documentType: string, fileName: string) =>
 };
 
 const getEndpointByFileName = (fileName: string): string => {
-  const name = fileName.toLowerCase();
+  // Remove file extension to get base name
+  const baseName = fileName.replace(/\.[^/.]+$/, '');
+  console.log('Mapping filename:', baseName);
   
-  // Map specific filenames to their corresponding data files
-  if (name.includes('paystub') && name.includes('high')) {
-    return 'document-processing-result-high-confidence';
-  }
-  if (name.includes('paystub') && name.includes('low')) {
-    return 'document-processing-result-low-confidence';
-  }
-  if (name.includes('drivers_license') && name.includes('high')) {
-    return 'personal-info-result-high-confidence';
-  }
-  if (name.includes('drivers_license') && name.includes('low')) {
-    return 'personal-info-result-low-confidence';
-  }
-  if (name.includes('utility_bill') && name.includes('high')) {
-    return 'misc-document-result-high-confidence';
-  }
-  if (name.includes('utility_bill') && name.includes('low')) {
-    return 'misc-document-result-low-confidence';
+  // Direct mapping - filename without extension should match JSON filename
+  const validEndpoints = [
+    'document-processing-result-high-confidence',
+    'document-processing-result-low-confidence',
+    'personal-info-result-high-confidence',
+    'personal-info-result-low-confidence',
+    'misc-document-result-high-confidence',
+    'misc-document-result-low-confidence'
+  ];
+  
+  if (validEndpoints.includes(baseName)) {
+    return baseName;
   }
   
   // Default fallback
+  console.log('Using default fallback for:', baseName);
   return 'document-processing-result-high-confidence';
 };

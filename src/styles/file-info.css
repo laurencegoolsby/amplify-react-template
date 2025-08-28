@@ -33,7 +33,7 @@
 
 .file-details p {
   color: #5a6c7d;
-  font-size: 18px;
+  font-size: 13px;
   margin: 2px 0;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .file-display {
-  height: 80%;
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -94,6 +94,47 @@
   background: linear-gradient(90deg, #0f4c75 0%, #1e5f8b 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
+}
+
+.explainability-content {
+  padding: 8px;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.field-key {
+  font-weight: 600;
+  color: #0f4c75;
+  min-width: 200px;
+  font-size: 14px;
+}
+
+.field-value {
+  color: #5a6c7d;
+  flex: 1;
+  font-size: 14px;
+}
+
+.field-confidence {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.confidence-high {
+  color: #28a745;
+}
+
+.confidence-medium {
+  color: #ffc107;
+}
+
+.confidence-low {
+  color: #dc3545;
 }
 
 .delete-btn {

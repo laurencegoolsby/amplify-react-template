@@ -54,6 +54,44 @@ function App() {
     return mb < 1 ? `${(bytes / 1024).toFixed(0)} KB` : `${mb.toFixed(2)} MB`;
   };
 
+  const renderExplainabilityInfo = (explainabilityInfo: any) => {
+    const getConfidenceClass = (confidence: number): string => {
+      if (confidence > 0.9) return 'confidence-high';
+      if (confidence >= 0.6) return 'confidence-medium';
+      return 'confidence-low';
+    };
+
+    const flattenFields = (obj: any, prefix: string = ''): JSX.Element[] => {
+      const items: JSX.Element[] = [];
+      
+      Object.entries(obj).forEach(([key, value]) => {
+        const fullKey = prefix ? `${prefix} ${key}` : key;
+        
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          if (value.confidence !== undefined) {
+            items.push(
+              <div key={fullKey} className="field-item">
+                <span className="field-key">{fullKey}:</span>
+                <span className="field-value">{value.value}</span>
+                <span className={`field-confidence ${getConfidenceClass(value.confidence)}`}>({Math.round(value.confidence * 100)}%)</span>
+              </div>
+            );
+          } else {
+            items.push(...flattenFields(value, fullKey));
+          }
+        }
+      });
+      
+      return items;
+    };
+
+    return (
+      <div className="explainability-content">
+        {flattenFields(explainabilityInfo)}
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (selectedFile) {
       setIsLoading(true);
@@ -163,7 +201,10 @@ function App() {
                 </div>
               ) : processingResult ? (
                 <div className="processing-result">
-                  <pre>{JSON.stringify(processingResult, null, 2)}</pre>
+                  {processingResult.explainability_info ? 
+                    renderExplainabilityInfo(processingResult.explainability_info) :
+                    <pre>{JSON.stringify(processingResult, null, 2)}</pre>
+                  }
                 </div>
               ) : null}
             </div>

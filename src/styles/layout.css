@@ -24,4 +24,5 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
