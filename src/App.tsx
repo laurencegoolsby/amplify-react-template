@@ -68,12 +68,12 @@ function App() {
         const fullKey = prefix ? `${prefix} ${key}` : key;
         
         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-          if (value.confidence !== undefined) {
+          if ((value as any).confidence !== undefined) {
             items.push(
               <div key={fullKey} className="field-item">
                 <span className="field-key">{fullKey}:</span>
-                <span className="field-value">{value.value}</span>
-                <span className={`field-confidence ${getConfidenceClass(value.confidence)}`}>({Math.round(value.confidence * 100)}%)</span>
+                <span className="field-value">{(value as any).value}</span>
+                <span className={`field-confidence ${getConfidenceClass((value as any).confidence)}`}>({Math.round((value as any).confidence * 100)}%)</span>
               </div>
             );
           } else {
@@ -109,7 +109,7 @@ function App() {
         });
       }, 200);
       
-      processDocument(selectedFile.type, selectedFile.name)
+      processDocument(selectedFile.name)
         .then(result => {
           setLoadingProgress(100);
           setTimeout(() => {
