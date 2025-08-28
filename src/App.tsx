@@ -16,7 +16,7 @@ function App() {
     console.log('Sign out clicked');
   };
 
-  const [documentType, setDocumentType] = useState('Personal Information');
+  const [documentType, setDocumentType] = useState('Paystub');
   const [uploadedFiles, setUploadedFiles] = useState<{id: string, name: string, size: number, type: string}[]>([]);
   const [selectedFile, setSelectedFile] = useState<{id: string, name: string, size: number, type: string} | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -61,6 +61,8 @@ function App() {
       return 'confidence-low';
     };
 
+    const confidenceValues: number[] = [];
+    
     const flattenFields = (obj: any, prefix: string = ''): JSX.Element[] => {
       const items: JSX.Element[] = [];
       
@@ -69,6 +71,7 @@ function App() {
         
         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
           if ((value as any).confidence !== undefined) {
+            confidenceValues.push((value as any).confidence);
             items.push(
               <div key={fullKey} className="field-item">
                 <span className="field-key">{fullKey}:</span>
@@ -85,9 +88,40 @@ function App() {
       return items;
     };
 
+    const fields = flattenFields(explainabilityInfo);
+    
+    const avgConfidence = confidenceValues.length > 0 ? confidenceValues.reduce((a, b) => a + b, 0) / confidenceValues.length : 0;
+    const minConfidence = confidenceValues.length > 0 ? Math.min(...confidenceValues) : 0;
+    const maxConfidence = confidenceValues.length > 0 ? Math.max(...confidenceValues) : 0;
+
+    const getBackgroundColor = (confidence: number): string => {
+      if (confidence > 0.9) return '#e8f5e8';
+      if (confidence >= 0.6) return '#fff8e1';
+      return '#ffeaea';
+    };
+
     return (
-      <div className="explainability-content">
-        {flattenFields(explainabilityInfo)}
+      <div className="explainability-content" style={{backgroundColor: getBackgroundColor(avgConfidence)}}>
+        <div className="confidence-stats">
+          <h4>Confidence Statistics</h4>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <span className="stat-label">Average:</span>
+              <span className={`stat-value ${getConfidenceClass(avgConfidence)}`}>{Math.round(avgConfidence * 100)}%</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Minimum:</span>
+              <span className={`stat-value ${getConfidenceClass(minConfidence)}`}>{Math.round(minConfidence * 100)}%</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Maximum:</span>
+              <span className={`stat-value ${getConfidenceClass(maxConfidence)}`}>{Math.round(maxConfidence * 100)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="field-details">
+          {fields}
+        </div>
       </div>
     );
   };
@@ -142,18 +176,26 @@ function App() {
             <div className="document-type-selector">
               <h3 className="selector-title">Document Type:</h3>
               <div className="radio-group">
-                {['Personal Information', 'Income', 'Miscellaneous'].map((type) => (
-                  <label key={type} className="radio-option">
-                    <input
-                      type="radio"
-                      name="documentType"
-                      value={type}
-                      checked={documentType === type}
-                      onChange={(e) => setDocumentType(e.target.value)}
-                    />
-                    <span>{type}</span>
-                  </label>
-                ))}
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="documentType"
+                    value="Paystub"
+                    checked={documentType === 'Paystub'}
+                    onChange={(e) => setDocumentType(e.target.value)}
+                  />
+                  <span>Paystub</span>
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="documentType"
+                    value="Other"
+                    checked={documentType === 'Other'}
+                    onChange={(e) => setDocumentType(e.target.value)}
+                  />
+                  <span>Other</span>
+                </label>
               </div>
             </div>
             
@@ -185,7 +227,7 @@ function App() {
         </div>
         
         <div className="results-section">
-          <h2 className="section-title">Processing Results</h2>
+          <h2 className="section-title">Intelligent Document Processing Results</h2>
           {uploadedFiles.length === 0 ? (
             <p className="section-description">
               Upload a document to see processing results here
@@ -200,7 +242,27 @@ function App() {
                   </div>
                 </div>
               ) : processingResult ? (
-                <div className="processing-result">
+                <div className="processing-result" style={processingResult.explainability_info ? {
+                  backgroundColor: (() => {
+                    const confidenceValues: number[] = [];
+                    const extractConfidence = (obj: any) => {
+                      Object.values(obj).forEach((value: any) => {
+                        if (typeof value === 'object' && value !== null) {
+                          if (value.confidence !== undefined) {
+                            confidenceValues.push(value.confidence);
+                          } else {
+                            extractConfidence(value);
+                          }
+                        }
+                      });
+                    };
+                    extractConfidence(processingResult.explainability_info);
+                    const avgConfidence = confidenceValues.length > 0 ? confidenceValues.reduce((a, b) => a + b, 0) / confidenceValues.length : 0;
+                    if (avgConfidence > 0.9) return '#e8f5e8';
+                    if (avgConfidence >= 0.6) return '#fff8e1';
+                    return '#ffeaea';
+                  })()
+                } : {}}>
                   {processingResult.explainability_info ? 
                     renderExplainabilityInfo(processingResult.explainability_info) :
                     <pre>{JSON.stringify(processingResult, null, 2)}</pre>
