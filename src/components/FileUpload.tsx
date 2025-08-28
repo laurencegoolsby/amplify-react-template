@@ -8,7 +8,7 @@ interface FileUploadProps {
 
 export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
+
 
   const uploadFile = async (file: File) => {
     onFileSelect?.(file);
@@ -33,21 +33,11 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
     }
   };
 
-  const handleDrop = (event: React.DragEvent) => {
-    event.preventDefault();
-    setDragOver(false);
-    const file = event.dataTransfer.files[0];
-    if (file) uploadFile(file);
-  };
+
 
   return (
-    <div className={`upload-container ${dragOver ? 'drag-over' : ''} ${uploading ? 'uploading' : ''}`}>
-      <div
-        className="upload-zone"
-        onDrop={handleDrop}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-      >
+    <div className={`upload-container ${uploading ? 'uploading' : ''}`}>
+      <div className="upload-zone">
         <input
           type="file"
           onChange={handleFileUpload}
@@ -66,8 +56,8 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
             </svg>
           </div>
           <div className="upload-text">
-            <h3>Drop files here or click to upload</h3>
-            <p>Supports PDF, DOC, DOCX, and image files</p>
+            <h3>Click to upload</h3>
+            <p>Supports PDF, DOC, DOCX, and image files (max 10MB)</p>
           </div>
         </label>
         {uploading && (
