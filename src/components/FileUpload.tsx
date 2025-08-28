@@ -45,7 +45,7 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           className="file-input"
           id="file-upload"
           accept=".pdf,application/pdf,.jpg,.jpeg,.png,.gif,.bmp,.webp,image/*"
-          capture="environment"
+          capture="user"
         />
         <label htmlFor="file-upload" className="upload-label">
           <div className="upload-icon">
