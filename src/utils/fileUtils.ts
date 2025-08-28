@@ -7,3 +7,7 @@ export const validateFileSize = (file: File, maxSizeMB: number = 10): boolean =>
   const maxSize = maxSizeMB * 1024 * 1024;
   return file.size <= maxSize;
 };
+
+export const validateFileType = (file: File): boolean => {
+  return file.type === 'application/pdf';
+};

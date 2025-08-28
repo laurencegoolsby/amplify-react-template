@@ -9,7 +9,7 @@ import ResultsDisplay from './components/ResultsDisplay';
 import { useAlert } from './hooks/useAlert';
 import { useFileUpload } from './hooks/useFileUpload';
 import { uploadFile } from './services/uploadService';
-import { formatFileSize, validateFileSize } from './utils/fileUtils';
+import { formatFileSize, validateFileSize, validateFileType } from './utils/fileUtils';
 import './styles/globals.css';
 import './styles/layout.css';
 import './styles/typography.css';
@@ -28,6 +28,11 @@ function App() {
     console.log('Sign out clicked');
   };
   const addFile = async (file: File) => {
+    if (!validateFileType(file)) {
+      alert.showAlertMessage('Please select a PDF file. Only PDF documents are supported.', 'error');
+      return;
+    }
+    
     if (!validateFileSize(file)) {
       alert.showAlertMessage('File size exceeds 10MB limit. Please choose a smaller file.', 'error');
       return;
@@ -42,13 +47,13 @@ function App() {
     
     fileUpload.setUploadInProgress(true);
     fileUpload.setUploadProgress(0);
-    fileUpload.addFile(newFile);
     
     try {
       const responseData = await uploadFile(file, documentType, fileUpload.setUploadProgress);
       
       setTimeout(() => {
         fileUpload.setUploadInProgress(false);
+        fileUpload.addFile(newFile);
         fileUpload.updateFileWithResponse(newFile.id, responseData);
         alert.showAlertMessage('Document uploaded successfully!', 'success');
       }, 500);

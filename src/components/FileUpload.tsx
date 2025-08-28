@@ -44,6 +44,7 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           disabled={uploading}
           className="file-input"
           id="file-upload"
+          accept=".pdf,application/pdf"
         />
         <label htmlFor="file-upload" className="upload-label">
           <div className="upload-icon">
@@ -57,7 +58,7 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
           </div>
           <div className="upload-text">
             <h3>Click to upload</h3>
-            <p>Supports PDF, DOC, DOCX, and image files (max 10MB)</p>
+            <p>PDF files only (max 10MB)</p>
           </div>
         </label>
         {uploading && (
