@@ -4,6 +4,49 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+@media (max-width: 1024px) and (min-width: 769px) {
+  .upload-container {
+    margin: 24px auto;
+  }
+  
+  .upload-text h3 {
+    font-size: 15px;
+  }
+  
+  .upload-icon svg {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-container {
+    margin: 16px auto;
+    max-width: 100%;
+  }
+  
+  .upload-label {
+    padding: 16px 12px;
+  }
+  
+  .upload-text h3 {
+    font-size: 14px;
+  }
+  
+  .upload-text p {
+    font-size: 12px;
+  }
+  
+  .upload-icon {
+    margin-bottom: 12px;
+  }
+  
+  .upload-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .upload-zone {
   position: relative;
   border: 2px dashed #0f4c75;

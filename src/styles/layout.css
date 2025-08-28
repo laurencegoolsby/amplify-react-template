@@ -26,3 +26,22 @@
   flex-direction: column;
   flex: 1;
 }
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .upload-section,
+  .results-section {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .upload-section,
+  .results-section {
+    width: 100%;
+    padding: 10px;
+  }
+}

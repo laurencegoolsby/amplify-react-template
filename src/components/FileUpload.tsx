@@ -12,39 +12,12 @@ export default function FileUpload({ onUploadComplete, onFileSelect }: FileUploa
 
   const uploadFile = async (file: File) => {
     onFileSelect?.(file);
-
     setUploading(true);
     
     try {
-      // Get presigned URL from your API
-      const response = await fetch('/api/upload-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: file.name,
-          fileType: file.type,
-          fileSize: file.size,
-          metadata: {
-            uploadedAt: new Date().toISOString(),
-            userAgent: navigator.userAgent
-          }
-        })
-      });
-
-      const { uploadUrl, key } = await response.json();
-
-      // Upload directly to CloudFront/S3
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type,
-          'x-amz-meta-uploaded-at': new Date().toISOString(),
-          'x-amz-meta-original-name': file.name
-        }
-      });
-
-      onUploadComplete?.({ key, url: uploadUrl.split('?')[0] });
+      // Simulate upload process
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      onUploadComplete?.({ key: file.name, url: '' });
     } catch (error) {
       console.error('Upload failed:', error);
     } finally {

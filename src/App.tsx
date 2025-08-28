@@ -23,9 +23,10 @@ function App() {
   const [processingResult, setProcessingResult] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [isNewUpload, setIsNewUpload] = useState(false);
 
-  const addFile = (file: File) => {
+
+
+  const addFile = async (file: File) => {
     // Check if file with same name already exists
     const isDuplicate = uploadedFiles.some(existingFile => existingFile.name === file.name);
     
@@ -40,8 +41,37 @@ function App() {
       size: file.size,
       type: documentType
     };
+    
+    // Send POST request to AWS API
+    const endpoint = 'http://copa-a-appli-xy2jnn96xnau-1399784121.us-west-2.elb.amazonaws.com/upload-pdf';
+    
+    try {
+      console.log(`Executing post request to: ${endpoint}`);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('fileName', file.name);
+      formData.append('fileSize', file.size.toString());
+      formData.append('documentType', documentType);
+      formData.append('contentType', file.type);
+      formData.append('timestamp', new Date().toISOString());
+      
+      await fetch(endpoint, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        },
+        body: formData
+      });
+    } catch (error) {
+      console.error('Failed to send document upload notification:', error);
+    }
+    
     setUploadedFiles(prev => [...prev, newFile]);
-    setIsNewUpload(true);
+
     setSelectedFile(newFile);
   };
 
@@ -227,7 +257,7 @@ function App() {
             <div className="files-list">
               <h3 className="selector-title">Uploaded Files:</h3>
               {uploadedFiles.map((file) => (
-                <div key={file.id} className={`file-item ${selectedFile?.id === file.id ? 'selected' : ''}`} onClick={() => { setIsNewUpload(false); setSelectedFile(file); }}>
+                <div key={file.id} className={`file-item ${selectedFile?.id === file.id ? 'selected' : ''}`} onClick={() => setSelectedFile(file)}>
                   <div className="file-details">
                     <p><strong>Name:</strong> {file.name}</p>
                     <p><strong>Type:</strong> {file.type}</p>
@@ -255,7 +285,7 @@ function App() {
             <div className="file-display">
               {isLoading ? (
                 <div className="loading-container">
-                  <div className="loading-text">{isNewUpload ? 'Processing document' : 'Retrieving data'}... {Math.round(loadingProgress)}%</div>
+                  <div className="loading-text">Processing document... {Math.round(loadingProgress)}%</div>
                   <div className="progress-bar">
                     <div className="progress-fill" style={{width: `${loadingProgress}%`}}></div>
                   </div>

@@ -139,6 +139,65 @@
   font-weight: 600;
 }
 
+@media (max-width: 1024px) and (min-width: 769px) {
+  .stat-label {
+    font-size: 13px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
+  
+  .field-key {
+    min-width: 180px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .stat-item {
+    flex: 1;
+    min-width: calc(50% - 6px);
+  }
+  
+  .stat-label {
+    font-size: 12px;
+  }
+  
+  .stat-value {
+    font-size: 18px;
+  }
+  
+  .field-key {
+    min-width: auto;
+    font-size: 13px;
+  }
+  
+  .field-value {
+    font-size: 13px;
+  }
+  
+  .field-confidence {
+    font-size: 13px;
+  }
+  
+  .file-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .delete-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
 .field-details h4 {
   margin: 0 0 12px 0;
   color: #0f4c75;
