@@ -16,7 +16,7 @@ export const mockApiCall = async <T>(endpoint: string, delay: number = 1000): Pr
 };
 
 // Specific mock API functions
-export const processDocument = async (documentType: string, fileName: string) => {
+export const processDocument = async (fileName: string) => {
   const endpoint = getEndpointByFileName(fileName);
   return mockApiCall(endpoint, 2000); // 2 second delay to simulate processing
 };
