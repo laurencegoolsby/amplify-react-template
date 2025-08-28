@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FileUpload from './components/FileUpload';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
@@ -9,6 +9,7 @@ import './styles/radio-group.css';
 import './styles/file-info.css';
 import './styles/upload-controls.css';
 import './styles/modal.css';
+import { processDocument } from './utils/mockApi';
 
 function App() {
   const handleSignOut = () => {
@@ -19,6 +20,10 @@ function App() {
   const [uploadedFiles, setUploadedFiles] = useState<{id: string, name: string, size: number, type: string}[]>([]);
   const [selectedFile, setSelectedFile] = useState<{id: string, name: string, size: number, type: string} | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [processingResult, setProcessingResult] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isNewUpload, setIsNewUpload] = useState(false);
 
   const addFile = (file: File) => {
     // Check if file with same name already exists
@@ -36,6 +41,8 @@ function App() {
       type: documentType
     };
     setUploadedFiles(prev => [...prev, newFile]);
+    setIsNewUpload(true);
+    setSelectedFile(newFile);
   };
 
   const deleteFile = (id: string) => {
@@ -46,6 +53,45 @@ function App() {
     const mb = bytes / 1024 / 1024;
     return mb < 1 ? `${(bytes / 1024).toFixed(0)} KB` : `${mb.toFixed(2)} MB`;
   };
+
+  useEffect(() => {
+    if (selectedFile) {
+      setIsLoading(true);
+      setLoadingProgress(0);
+      setProcessingResult(null);
+      
+      // Simulate progress
+      const progressInterval = setInterval(() => {
+        setLoadingProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return prev;
+          }
+          return prev + Math.random() * 15;
+        });
+      }, 200);
+      
+      processDocument(selectedFile.type, selectedFile.name)
+        .then(result => {
+          setLoadingProgress(100);
+          setTimeout(() => {
+            setProcessingResult(result);
+            setIsLoading(false);
+            clearInterval(progressInterval);
+          }, 300);
+        })
+        .catch(error => {
+          console.error('Failed to fetch processing result:', error);
+          setProcessingResult(null);
+          setIsLoading(false);
+          clearInterval(progressInterval);
+        });
+    } else {
+      setProcessingResult(null);
+      setIsLoading(false);
+      setLoadingProgress(0);
+    }
+  }, [selectedFile]);
 
   return (
     <div className="app-container">
@@ -82,7 +128,7 @@ function App() {
             <div className="files-list">
               <h3 className="selector-title">Uploaded Files:</h3>
               {uploadedFiles.map((file) => (
-                <div key={file.id} className={`file-item ${selectedFile?.id === file.id ? 'selected' : ''}`} onClick={() => setSelectedFile(file)}>
+                <div key={file.id} className={`file-item ${selectedFile?.id === file.id ? 'selected' : ''}`} onClick={() => { setIsNewUpload(false); setSelectedFile(file); }}>
                   <div className="file-details">
                     <p><strong>Name:</strong> {file.name}</p>
                     <p><strong>Type:</strong> {file.type}</p>
@@ -108,7 +154,18 @@ function App() {
             </p>
           ) : selectedFile ? (
             <div className="file-display">
-              <h3 className="file-display-title">{selectedFile.name} | {selectedFile.type} | {formatFileSize(selectedFile.size)}</h3>
+              {isLoading ? (
+                <div className="loading-container">
+                  <div className="loading-text">{isNewUpload ? 'Processing document' : 'Retrieving data'}... {Math.round(loadingProgress)}%</div>
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{width: `${loadingProgress}%`}}></div>
+                  </div>
+                </div>
+              ) : processingResult ? (
+                <div className="processing-result">
+                  <pre>{JSON.stringify(processingResult, null, 2)}</pre>
+                </div>
+              ) : null}
             </div>
           ) : (
             <p className="section-description">

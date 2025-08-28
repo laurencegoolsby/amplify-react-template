@@ -14,14 +14,14 @@
 
 .upload-section {
   width: 50%;
-  padding: 40px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
 }
 
 .results-section {
   width: 50%;
-  padding: 40px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
 }
