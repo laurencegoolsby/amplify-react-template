@@ -61,9 +61,19 @@ function App() {
       console.error('Failed to send document upload notification:', error);
       setTimeout(() => {
         fileUpload.setUploadInProgress(false);
-        const errorMessage = error instanceof Error && error.message.includes('HTTP error') 
-          ? 'Upload failed. Please try again.' 
-          : 'Network error. Please check your connection.';
+        let errorMessage = 'Network error. Please check your connection.';
+        
+        if (error instanceof Error && error.message.includes('HTTP error')) {
+          const statusMatch = error.message.match(/status: (\d+)/);
+          const status = statusMatch ? parseInt(statusMatch[1]) : 0;
+          
+          if (status >= 400 && status < 500) {
+            errorMessage = 'This file cannot be processed. Please try a different file.';
+          } else {
+            errorMessage = 'Upload failed. Please try again.';
+          }
+        }
+        
         alert.showAlertMessage(errorMessage, 'error');
       }, 500);
     }
