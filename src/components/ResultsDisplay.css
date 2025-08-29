@@ -109,6 +109,10 @@
 .validation-items-list {
   margin: 0;
   padding: 0 0 0 20px;
+  background-color: transparent !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .validation-box.success .validation-items-list {
@@ -119,11 +123,16 @@
   color: #a67c00;
 }
 
-.validation-item {
-  font-size: 14px;
+.validation-items-list .validation-item {
+  font-size: 14px !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style-type: disc !important;
 }
 
-.validation-item:hover {
+.validation-items-list .validation-item:hover {
   background-color: transparent !important;
   border-color: transparent !important;
 }

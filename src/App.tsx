@@ -43,7 +43,7 @@ function App() {
       id: Date.now().toString(),
       name: file.name,
       size: file.size,
-      type: documentType
+      type: 'Paystub'
     };
     
     fileUpload.setUploadInProgress(true);
