@@ -3,7 +3,7 @@ import FileUpload from './components/FileUpload';
 import Header from './layouts/Header';
 import Footer from './layouts/Footer';
 import Alert from './components/Alert';
-import DocumentTypeSelector from './components/DocumentTypeSelector';
+
 import FilesList from './components/FilesList';
 import ResultsDisplay from './components/ResultsDisplay';
 import { useAlert } from './hooks/useAlert';
@@ -13,13 +13,12 @@ import { formatFileSize, validateFileSize, validateFileType } from './utils/file
 import './styles/globals.css';
 import './styles/layout.css';
 import './styles/typography.css';
-import './styles/radio-group.css';
+
 import './styles/file-info.css';
 import './styles/upload-controls.css';
 import './styles/modal.css';
 
 function App() {
-  const [documentType, setDocumentType] = useState('Paystub');
   const [uploadingFile, setUploadingFile] = useState<any>(null);
   
   const alert = useAlert();
@@ -42,8 +41,7 @@ function App() {
     const newFile = {
       id: Date.now().toString(),
       name: file.name,
-      size: file.size,
-      type: 'Paystub'
+      size: file.size
     };
     
     fileUpload.setUploadInProgress(true);
@@ -51,7 +49,7 @@ function App() {
     setUploadingFile(newFile);
     
     try {
-      const responseData = await uploadFile(file, documentType, fileUpload.setUploadProgress);
+      const responseData = await uploadFile(file, fileUpload.setUploadProgress);
       
       setTimeout(async () => {
         fileUpload.setUploadProgress(100);
@@ -138,11 +136,6 @@ function App() {
         <div className="upload-section">
           <h2 className="section-title">Document Upload</h2>          
           <div className="upload-controls">
-            <DocumentTypeSelector 
-              documentType={documentType}
-              onDocumentTypeChange={setDocumentType}
-            />
-            
             <div className="upload-wrapper">
               <FileUpload onUploadComplete={() => {}} onFileSelect={addFile} disabled={fileUpload.uploadInProgress} />
             </div>

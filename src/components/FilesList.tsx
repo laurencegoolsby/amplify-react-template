@@ -21,7 +21,6 @@ export default function FilesList({ files, selectedFile, onFileSelect, formatFil
         >
           <div className="file-details">
             <p><strong>Name:</strong> {file.name}</p>
-            <p><strong>Type:</strong> {file.type}</p>
             <p><strong>Size:</strong> {formatFileSize(file.size)}</p>
           </div>
         </div>

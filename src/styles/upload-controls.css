@@ -6,10 +6,7 @@
   margin-bottom: 32px;
 }
 
-.document-type-selector {
-  flex: 0 0 auto;
-  min-width: 200px;
-}
+
 
 .endpoint-toggle {
   margin-top: 16px;
@@ -28,9 +25,7 @@
     gap: 24px;
   }
   
-  .document-type-selector {
-    min-width: 180px;
-  }
+
 }
 
 @media (max-width: 768px) {
@@ -39,10 +34,7 @@
     gap: 16px;
   }
   
-  .document-type-selector {
-    min-width: auto;
-    width: 100%;
-  }
+
   
   .upload-wrapper {
     width: 100%;

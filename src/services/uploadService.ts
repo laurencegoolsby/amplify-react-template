@@ -1,6 +1,5 @@
 export const uploadFile = async (
   file: File, 
-  documentType: string,
   onProgress: (progress: number | ((prev: number) => number)) => void
 ): Promise<any> => {
   const endpoint = 'http://copa-a-appli-xy2jnn96xnau-1399784121.us-west-2.elb.amazonaws.com/upload';
@@ -9,7 +8,7 @@ export const uploadFile = async (
   formData.append('file', file);
   formData.append('fileName', file.name);
   formData.append('fileSize', file.size.toString());
-  formData.append('documentType', documentType);
+  formData.append('documentType', 'Document');
   formData.append('contentType', file.type);
   formData.append('timestamp', new Date().toISOString());
   
