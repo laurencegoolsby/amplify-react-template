@@ -53,11 +53,40 @@ function App() {
     try {
       const responseData = await uploadFile(file, documentType, fileUpload.setUploadProgress);
       
-      setTimeout(() => {
+      setTimeout(async () => {
         fileUpload.setUploadProgress(100);
         fileUpload.setUploadInProgress(false);
         fileUpload.addFile(newFile);
         fileUpload.updateFileWithResponse(newFile.id, responseData);
+        
+        // Fetch processed result from S3 if presigned URL exists
+        if (responseData.data?.presignedurl) {
+          try {
+            const s3Response = await fetch(responseData.data.presignedurl, {
+              method: 'GET',
+              mode: 'cors',
+              headers: {
+                'Accept': 'application/json',
+              }
+            });
+            
+            if (!s3Response.ok) {
+              throw new Error(`S3 fetch failed: ${s3Response.status}`);
+            }
+            
+            const s3Data = await s3Response.json();
+            fileUpload.updateFileWithResponse(newFile.id, { 
+              ...responseData, 
+              s3Result: s3Data
+            });
+          } catch (s3Error) {
+            console.error('Failed to fetch S3 result:', s3Error);
+            fileUpload.updateFileWithResponse(newFile.id, { ...responseData, s3Error: true });
+          }
+        } else {
+          fileUpload.updateFileWithResponse(newFile.id, { ...responseData, s3Error: true });
+        }
+        
         setUploadingFile(null);
         alert.showAlertMessage('Document uploaded successfully!', 'success');
       }, 500);
@@ -115,7 +144,7 @@ function App() {
             />
             
             <div className="upload-wrapper">
-              <FileUpload onUploadComplete={(result) => console.log('Upload complete:', result)} onFileSelect={addFile} disabled={fileUpload.uploadInProgress} />
+              <FileUpload onUploadComplete={() => {}} onFileSelect={addFile} disabled={fileUpload.uploadInProgress} />
             </div>
           </div>
           

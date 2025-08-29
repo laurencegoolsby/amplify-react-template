@@ -1,5 +1,10 @@
 import { UploadedFile } from '../hooks/useFileUpload';
 import ExplainabilityRenderer from './ExplainabilityRenderer';
+import ValidationBox from './ValidationBox';
+import CollapsibleJsonDisplay from './CollapsibleJsonDisplay';
+import LoadingState from './LoadingState';
+import { validateDocument } from '../utils/documentValidation';
+import './ResultsDisplay.css';
 
 interface ResultsDisplayProps {
   uploadedFiles: UploadedFile[];
@@ -19,16 +24,7 @@ export default function ResultsDisplay({
   showResults 
 }: ResultsDisplayProps) {
   if (uploadInProgress && selectedFile) {
-    return (
-      <div className="file-display">
-        <div className="loading-container">
-          <div className="loading-text">Uploading... {Math.round(uploadProgress)}%</div>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{width: `${uploadProgress}%`}}></div>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingState progress={uploadProgress} />;
   }
 
   if (uploadedFiles.length === 0) {
@@ -50,12 +46,29 @@ export default function ResultsDisplay({
   return (
     <div className="file-display">
       {selectedFile?.apiResponse ? (
-        <div style={{width: '100%', padding: '20px'}}>
-          <div style={{backgroundColor: '#f8fbff', border: '1px solid #e1e5e9', borderRadius: '8px', padding: '16px', overflow: 'auto'}}>
-            <pre style={{margin: 0, fontSize: '12px', color: '#5a6c7d', whiteSpace: 'pre-wrap', wordWrap: 'break-word'}}>
-              {JSON.stringify(selectedFile.apiResponse, null, 2)}
-            </pre>
-          </div>
+        <div className="results-container">
+          {selectedFile.apiResponse.s3Error ? (
+            <div className="unavailable-message">
+              <p>
+                Processing results are unavailable. Please try again in a few moments.
+              </p>
+            </div>
+          ) : (
+            <>
+              {selectedFile.apiResponse.s3Result && (
+                <div className="validation-container">
+                  <ValidationBox 
+                    validation={validateDocument(selectedFile.apiResponse.s3Result)}
+                    fileName={selectedFile.name}
+                  />
+                </div>
+              )}
+              <CollapsibleJsonDisplay 
+                data={selectedFile.apiResponse.s3Result || selectedFile.apiResponse}
+                title="Document Processing Response JSON"
+              />
+            </>
+          )}
         </div>
       ) : processingResult && showResults ? (
         <div className="processing-result" style={processingResult.explainability_info ? {
